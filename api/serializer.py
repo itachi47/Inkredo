@@ -1,7 +1,7 @@
 
 from dataclasses import field, fields
 from rest_framework.serializers import ModelSerializer
-from .models import Company, User, UserHistory
+from .models import Company, PastEmployee, PresentEmployee, User, UserHistory
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
@@ -35,4 +35,16 @@ class UserSerializer(ModelSerializer):
 class UserHistorySerializor(ModelSerializer):
     class Meta:
         model = UserHistory
+        fields = '__all__'
+
+
+class PresentEmployeeSerializer(ModelSerializer):
+    class Meta:
+        model = PresentEmployee
+        fields = '__all__'
+
+
+class PastEmployeeSerializer(ModelSerializer):
+    class Meta:
+        model = PastEmployee
         fields = '__all__'

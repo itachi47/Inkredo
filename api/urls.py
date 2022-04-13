@@ -21,7 +21,7 @@ urlpatterns = [
 
     # register new user /done
     # join and leave current company /done
-    # Leaving company needs to crate a userHistory record -> view supporting function /working
+    # @supporting -> Leaving company needs to crate a userHistory record /done
     # get the history of user where he had worked in the past /done
     path('user/register/', views.register, name='register-user'),
     path('user/<str:pk>/company/', views.joinLeaveCompany,
@@ -31,10 +31,15 @@ urlpatterns = [
 
 
     # Gives the list of all companies /done
+    # Gives the list of present employee of the company /done
+    # @supporting -> if emp leaves add to past list and remove from present /working
+    # @supporting -> if emp join and was in pas change to present if not in present /present
+    # Gives the list of past employee of the company /done
     path('company/all/', views.getComanyList, name='company-list'),
-
-
-
+    path('company/<str:pk>/presentemployee/',
+         views.getPresentEmployeeList, name='present-employee-list'),
+    path('company/<str:pk>/pastemployee/',
+         views.getPastEmployeeList, name='past-employee-list'),
 
 
 ]

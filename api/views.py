@@ -11,9 +11,9 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 import datetime
-from api.models import Company, User, UserHistory
+from api.models import Company, PastEmployee, PresentEmployee, User, UserHistory
 
-from api.serializer import CompanySerializer, MyTokenObtainPairSerializer, UserHistorySerializor, UserSerializer
+from api.serializer import CompanySerializer, MyTokenObtainPairSerializer, PastEmployeeSerializer, PresentEmployeeSerializer, UserHistorySerializor, UserSerializer
 
 
 # Create your views here.
@@ -62,19 +62,36 @@ def addHistory(request, pk=None):
     return Response(serialized_history.data)
 
 
-# User leave the current company id in url via get metod
+# @supporting function to udpate the company history list
+def handlePastList(uid, cid, add=True):
+    pass
+
+
+def handlePresentList(uid, cid, add=True):
+    if add:
+        user = User.objects.get(id=uid)
+        company = Company.objects.get(id=cid)
+        entry = PresentEmployee.objects.create(
+            user=user, company=company,
+        )
+    else:
+        user = PresentEmployee.objects.get(user=pk).delete()
+    return JsonResponse('ok', safe=False)
+
+
+# User leave the current company id in url via get method
 # User join the new company via company id in payload and post method
-
-
 @ csrf_exempt
 @ api_view(['GET', 'POST'])
 def joinLeaveCompany(request, pk=None):
     if request.method == 'GET':
         addHistory(request._request, pk)
+        handlePresentList(pk, False)
         return updateCurrCompany(request._request, pk)
     if request.method == 'POST':
         payload = request.data
         compamy = Company.objects.get(id=payload['id'])
+        handlePresentList(pk, payload['id'])
         return updateCurrCompany(request._request, pk, compamy)
 
 
@@ -85,3 +102,19 @@ def userHistory(request, pk=None):
     history_list = UserHistory.objects.filter(user=pk)
     serialized_history_list = UserHistorySerializor(history_list, many=True)
     return Response(serialized_history_list.data)
+
+
+@ csrf_exempt
+@ api_view(['GET'])
+def getPresentEmployeeList(request, pk=None):
+    emp_list = PresentEmployee.objects.filter(company=pk)
+    serialized_list = PresentEmployeeSerializer(emp_list, many=True)
+    return Response(serialized_list.data)
+
+
+@ csrf_exempt
+@ api_view(['GET'])
+def getPastEmployeeList(request, pk=None):
+    emp_list = PastEmployee.objects.filter(company=pk)
+    serialized_list = PastEmployeeSerializer(emp_list, many=True)
+    return Response(serialized_list.data)

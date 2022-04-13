@@ -103,3 +103,22 @@ class UserHistory(models.Model):
 
     def __str__(self) -> str:
         return self.user.full_name
+
+
+class PresentEmployee(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return self.user.full_name
+
+
+class PastEmployee(models.Model):
+    class Meta:
+        unique_together = (('user', 'company'))
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return self.user.full_name
