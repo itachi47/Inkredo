@@ -1,7 +1,7 @@
 from atexit import unregister
 from django.contrib import admin
 
-from api.models import Company
+from api.models import Company, UserHistory
 from django.contrib.auth import get_user_model
 from .forms import UserAdminCreationForm, UserAdminChangeForm
 
@@ -42,6 +42,7 @@ class UserAdmin(BaseUserAdmin):
 # Register your models here.
 admin.site.register(Company)
 admin.site.register(User, UserAdmin)
+admin.site.register(UserHistory)
 
 
 # Unregister your model here.

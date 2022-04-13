@@ -70,7 +70,7 @@ class User(AbstractBaseUser):
     def getCompany(self):
         return self.company
 
-    def setCompany(self, company):
+    def setCompany(self, company=None):
         self.company = company
 
     def __str__(self) -> str:
@@ -93,3 +93,13 @@ class User(AbstractBaseUser):
     @property
     def is_active(self):
         return self.active
+
+
+class UserHistory(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, unique=False)
+    company = models.ForeignKey(
+        Company, on_delete=models.CASCADE, unique=False)
+    duration = models.IntegerField(unique=False)
+
+    def __str__(self) -> str:
+        return self.user.full_name
