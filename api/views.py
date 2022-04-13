@@ -28,9 +28,9 @@ def register(request):
     employee = User.objects.create_user(
         data['email'], data['full_name'], data['password']
     )
-    serializer = UserSerializer(employee, many=True)
+    serialized_user = UserSerializer(employee, many=True)
 
-    return Response(serializer.data)
+    return Response(serialized_user.data)
     # return JsonResponse("ok", safe=False)
 
 
